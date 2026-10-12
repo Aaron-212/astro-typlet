@@ -31,7 +31,7 @@ Write formulas in Typst syntax. To avoid conflicts, disable other plugins that p
 For Astro 7, install the package directly:
 
 ```sh
-pnpm add @aaron212/satteri-typlet
+pnpm add @aaron212/satteri-typlet typlet
 ```
 
 Configure `astro.config.ts` and pass rendering options to `typlet()`:
