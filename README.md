@@ -195,7 +195,8 @@ mise exec -- npm stage publish --access public --registry https://registry.npmjs
 
 Staging a new package creates a public `0.0.0-stage` placeholder; the staged version's contents become public only
 after approval. In the npm package settings, configure a GitHub Actions trusted publisher for user `Aaron-212`,
-repository `satteri-typlet`, and workflow `publish.yml`, leaving the environment empty. Allow only staging: leave
+repository `satteri-typlet`, workflow `publish.yml`, and environment `npm`. The publishing job uses the GitHub Actions
+environment named `npm`; its name must match the npm trusted publisher configuration exactly. Allow only staging: leave
 `npm publish` and dist-tag management permissions disabled.
 
 After committing and pushing the release changes, create and push a version tag:
