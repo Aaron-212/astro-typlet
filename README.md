@@ -4,6 +4,8 @@ A pair of [Sätteri](https://satteri.bruits.org/) plugins and an Astro integrati
 [Typst math](https://github.com/dbccccccc/Typlet) using Typlet. Formula contents are passed directly to Typlet;
 LaTeX is not converted or rendered.
 
+For a simple demo, checkout [the demo site](http://aaron212.com/blog/typlet-test/).
+
 ## Usage
 
 ### Astro integration
