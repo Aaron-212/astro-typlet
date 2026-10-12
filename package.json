@@ -2,6 +2,14 @@
   "name": "@aaron212/satteri-typlet",
   "version": "0.0.1",
   "description": "Sätteri plugins and an Astro integration for Typlet math rendering.",
+  "keywords": [
+    "astro",
+    "markdown",
+    "math",
+    "satteri",
+    "typlet",
+    "typst"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Aaron-212/satteri-typlet.git"
