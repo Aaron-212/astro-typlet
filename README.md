@@ -1,10 +1,46 @@
 # satteri-typlet
 
-A [Sätteri](https://satteri.bruits.org/) HAST plugin that renders every inline and block math formula as
+A pair of [Sätteri](https://satteri.bruits.org/) plugins and an Astro integration that render inline and block math as
 [Typst math](https://github.com/dbccccccc/Typlet) using Typlet. Formula contents are passed directly to Typlet;
 LaTeX is not converted or rendered.
 
 ## Usage
+
+### Astro integration
+
+For Astro 7, install the package directly:
+
+```sh
+pnpm add satteri-typlet
+```
+
+Configure `astro.config.ts`:
+
+```ts
+import { defineConfig } from "astro/config";
+import typlet from "satteri-typlet/astro";
+
+export default defineConfig({
+  integrations: [typlet({ throwOnError: false, copyTypst: true })],
+});
+```
+
+The integration enables math parsing, registers both plugins, and imports `typlet/fonts/typlet.css` on every page.
+You do not need to import the stylesheet in your layout. It accepts the same rendering options as
+`renderTypletMath()`; the options type is exported as `AstroTypletOptions` from `satteri-typlet/astro`.
+
+Set `copyTypst: true` to load `typlet/contrib/copy-typst` as a bundled client-side script on every page. When users
+copy rendered formulas, the clipboard's plain text contains their Typst source with math delimiters. This option
+defaults to `false`.
+
+Existing Sätteri features and plugins are preserved, with math enabled and Typlet's plugins appended. If another
+integration configures `markdown.processor`, place Typlet after it in the integrations array. A processor other
+than Sätteri produces a configuration error; switch to `satteri()` explicitly to use this integration.
+Do not also register the Typlet plugins manually.
+
+MDX inherits this configuration when `@astrojs/mdx` uses the site's Markdown processor. An explicit MDX processor
+override must be configured separately with the plugins shown below. Astro dependencies are optional peers;
+standalone Sätteri users can continue using the package's main entry point without installing Astro.
 
 ### Astro + Sätteri
 
