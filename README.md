@@ -8,6 +8,24 @@ For a simple demo, checkout [the demo site](http://aaron212.com/blog/typlet-test
 
 ## Usage
 
+The plugin renders inline math, block math, and fenced code blocks labeled `typlet` using Typst math syntax.
+
+For example, the following blocks are rendered as Typst formulas:
+
+````md
+$ e = m c^2 $
+
+$$
+x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)
+$$
+
+```typlet
+f(x) = x^2 + 3x + 2
+```
+````
+
+Write formulas in Typst syntax. To avoid conflicts, disable other plugins that process LaTeX math.
+
 ### Astro integration
 
 For Astro 7, install the package directly:
