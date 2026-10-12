@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Stage npm release
 
 on:
   push:
@@ -21,12 +21,12 @@ jobs:
       id-token: write
     steps:
       - name: Check out release
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - name: Set up tools
-        uses: jdx/mise-action@v5
+        uses: jdx/mise-action@08ae2a091c038e1e05ec6f5115dc5c69d5a2a6b8 # v5
         with:
           cache: false
 
@@ -62,7 +62,7 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Publish to npm
-        run: npm publish --access public --registry https://registry.npmjs.org --tag "$DIST_TAG"
+      - name: Stage release on npm
+        run: npm stage publish --access public --registry https://registry.npmjs.org --tag "$DIST_TAG"
         env:
           DIST_TAG: ${{ steps.version.outputs.dist-tag }}

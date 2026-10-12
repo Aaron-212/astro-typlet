@@ -158,10 +158,25 @@ Run `mise exec -- pnpm build` to generate JavaScript and TypeScript declarations
 
 ## Publishing
 
-The GitHub Actions workflow in `.github/workflows/publish.yml` publishes tags matching `v*` to npm. It installs
+The GitHub Actions workflow in `.github/workflows/publish.yml` stages releases for tags matching `v*` on npm. It installs
 dependencies with the frozen lockfile, checks formatting, linting, and types, then sets the package version from
 the tag and builds the package. The committed `package.json` version is a development placeholder; CI updates it
 only in the release checkout, without creating a commit or another tag.
+
+Use npm 11.15.0 or newer and enable 2FA on your npm account. For the first release, log in, install dependencies,
+build the package, and stage it locally:
+
+```sh
+mise exec -- npm login --registry https://registry.npmjs.org
+mise exec -- pnpm install --frozen-lockfile
+mise exec -- pnpm build
+mise exec -- npm stage publish --access public --registry https://registry.npmjs.org
+```
+
+Staging a new package creates a public `0.0.0-stage` placeholder; the staged version's contents become public only
+after approval. In the npm package settings, configure a GitHub Actions trusted publisher for user `Aaron-212`,
+repository `satteri-typlet`, and workflow `publish.yml`, leaving the environment empty. Allow only staging: leave
+`npm publish` and dist-tag management permissions disabled.
 
 After committing and pushing the release changes, create and push a version tag:
 
@@ -172,3 +187,14 @@ git push origin v0.0.2
 
 Use exact SemVer tags such as `v0.0.2` or `v0.1.0-beta.1`. Stable releases use npm's `latest` dist-tag;
 prereleases use `next`. Choose a new version for every release, since npm does not allow reusing a published version.
+
+After a local or CI staging run, review and approve the release with 2FA:
+
+```sh
+mise exec -- npm stage list @aaron212/satteri-typlet
+mise exec -- npm stage view <stage-id>
+mise exec -- npm stage approve <stage-id>
+```
+
+You can also review and approve releases in npm's Staged Packages tab. See the
+[staged publishing documentation](https://docs.npmjs.com/staged-publishing/) for details.
