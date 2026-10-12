@@ -1,0 +1,68 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out release
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up tools
+        uses: jdx/mise-action@v5
+        with:
+          cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Check types
+        run: pnpm check
+
+      - name: Set version from release tag
+        id: version
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          npm version "$version" --no-git-tag-version --allow-same-version --ignore-scripts
+          actual_version="$(node -p 'require("./package.json").version')"
+          if [[ "$actual_version" != "$version" ]]; then
+            echo "::error::Release tag must contain an exact SemVer version: v<major>.<minor>.<patch>[-prerelease]"
+            exit 1
+          fi
+          if [[ "$version" == *-* ]]; then
+            echo "dist-tag=next" >> "$GITHUB_OUTPUT"
+          else
+            echo "dist-tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish to npm
+        run: npm publish --access public --registry https://registry.npmjs.org --tag "$DIST_TAG"
+        env:
+          DIST_TAG: ${{ steps.version.outputs.dist-tag }}

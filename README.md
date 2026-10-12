@@ -1,4 +1,4 @@
-# satteri-typlet
+# @aaron212/satteri-typlet
 
 A pair of [Sätteri](https://satteri.bruits.org/) plugins and an Astro integration that render inline and block math as
 [Typst math](https://github.com/dbccccccc/Typlet) using Typlet. Formula contents are passed directly to Typlet;
@@ -11,32 +11,26 @@ LaTeX is not converted or rendered.
 For Astro 7, install the package directly:
 
 ```sh
-pnpm add satteri-typlet
+pnpm add @aaron212/satteri-typlet
 ```
 
-Configure `astro.config.ts`:
+Configure `astro.config.ts` and pass rendering options to `typlet()`:
 
 ```ts
 import { defineConfig } from "astro/config";
-import typlet from "satteri-typlet/astro";
+import typlet from "@aaron212/satteri-typlet/astro";
 
 export default defineConfig({
   integrations: [typlet({ throwOnError: false, copyTypst: true })],
 });
 ```
 
-The integration enables math parsing, registers both plugins, and imports `typlet/fonts/typlet.css` on every page.
-You do not need to import the stylesheet in your layout. It accepts the same rendering options as
-`renderTypletMath()`; the options type is exported as `AstroTypletOptions` from `satteri-typlet/astro`.
+The `AstroTypletOptions` type is exported from `@aaron212/satteri-typlet/astro`. The integration enables Sätteri's
+math feature and registers the plugins with the supplied rendering options.
 
 Set `copyTypst: true` to load `typlet/contrib/copy-typst` as a bundled client-side script on every page. When users
 copy rendered formulas, the clipboard's plain text contains their Typst source with math delimiters. This option
 defaults to `false`.
-
-Existing Sätteri features and plugins are preserved, with math enabled and Typlet's plugins appended. If another
-integration configures `markdown.processor`, place Typlet after it in the integrations array. A processor other
-than Sätteri produces a configuration error; switch to `satteri()` explicitly to use this integration.
-Do not also register the Typlet plugins manually.
 
 MDX inherits this configuration when `@astrojs/mdx` uses the site's Markdown processor. An explicit MDX processor
 override must be configured separately with the plugins shown below. Astro dependencies are optional peers;
@@ -47,7 +41,7 @@ standalone Sätteri users can continue using the package's main entry point with
 Install this plugin and Astro's configurable Sätteri processor in your Astro project:
 
 ```sh
-pnpm add satteri-typlet @astrojs/markdown-satteri typlet
+pnpm add @aaron212/satteri-typlet @astrojs/markdown-satteri typlet
 ```
 
 Configure `astro.config.ts`:
@@ -55,18 +49,20 @@ Configure `astro.config.ts`:
 ```ts
 import { satteri } from "@astrojs/markdown-satteri";
 import { defineConfig } from "astro/config";
-import { prepareTypletMath, renderTypletMath } from "satteri-typlet";
+import { prepareTypletMath, renderTypletMath } from "@aaron212/satteri-typlet";
 
 export default defineConfig({
   markdown: {
     processor: satteri({
       features: { math: true },
       mdastPlugins: [prepareTypletMath()],
-      hastPlugins: [renderTypletMath()],
+      hastPlugins: [renderTypletMath({ throwOnError: false })],
     }),
   },
 });
 ```
+
+Pass rendering options to `renderTypletMath()`; `prepareTypletMath()` takes no options.
 
 Use both plugins: `prepareTypletMath()` prepares dollar-delimited block math and fenced `math` blocks before
 Astro's syntax highlighter runs; `renderTypletMath()` renders the formulas afterward. Ordinary code blocks keep
@@ -99,7 +95,7 @@ configuration. Write formulas using Typst syntax, for example `$x^2 + y^2 = z^2$
 
 ```ts
 import { markdownToHtml } from "satteri";
-import { renderTypletMath } from "satteri-typlet";
+import { renderTypletMath } from "@aaron212/satteri-typlet";
 
 const markdown = `Inline math: $x^2 + y^2 = z^2$.
 
@@ -110,9 +106,18 @@ $$
 
 const { html } = markdownToHtml(markdown, {
   features: { math: true },
-  hastPlugins: [renderTypletMath()],
+  hastPlugins: [
+    renderTypletMath({
+      output: "htmlAndMathml",
+      throwOnError: false,
+      preamble: '#let norm(x) = $lr(|| #x ||)$\n#set math.equation(numbering: "(1)")',
+    }),
+  ],
 });
 ```
+
+Pass rendering options to `renderTypletMath()`. The `SatteriTypletOptions` type is exported from
+`@aaron212/satteri-typlet`. `copyTypst` is available only through the Astro integration.
 
 Enable `features.math` to parse dollar-delimited math. Sätteri controls the delimiters and whether a formula is
 inline or display; only the formula's contents use Typst syntax. Fenced `math` code blocks also render as display
@@ -128,18 +133,10 @@ Alternatively, serve `typlet/fonts/typlet.css` and its adjacent font files and l
 Rendering is synchronous and does not need browser JavaScript. The generated HTML is parsed into HAST elements
 so subsequent plugins and Sätteri's JavaScript/MDX compilation can process it.
 
-## Options
+### Rendering options
 
-The plugin accepts Typlet's `RenderOptions` except `displayMode`, which is determined by each math node.
-The options type is exported as `SatteriTypletOptions`.
-
-```ts
-renderTypletMath({
-  output: "htmlAndMathml",
-  throwOnError: false,
-  preamble: '#let norm(x) = $lr(|| #x ||)$\n#set math.equation(numbering: "(1)")',
-});
-```
+Both `typlet()` and `renderTypletMath()` accept Typlet's `RenderOptions` except `displayMode`, which is determined
+by each math node. Use the configuration example for your entry point above.
 
 Typlet's defaults apply: output includes HTML and accessible MathML, and invalid formulas throw a `TypletError`.
 Set `throwOnError: false` to show invalid formula source in the configured error color instead.
@@ -158,3 +155,20 @@ mise exec -- pnpm check
 ```
 
 Run `mise exec -- pnpm build` to generate JavaScript and TypeScript declarations in `dist/`.
+
+## Publishing
+
+The GitHub Actions workflow in `.github/workflows/publish.yml` publishes tags matching `v*` to npm. It installs
+dependencies with the frozen lockfile, checks formatting, linting, and types, then sets the package version from
+the tag and builds the package. The committed `package.json` version is a development placeholder; CI updates it
+only in the release checkout, without creating a commit or another tag.
+
+After committing and pushing the release changes, create and push a version tag:
+
+```sh
+git tag v0.0.2
+git push origin v0.0.2
+```
+
+Use exact SemVer tags such as `v0.0.2` or `v0.1.0-beta.1`. Stable releases use npm's `latest` dist-tag;
+prereleases use `next`. Choose a new version for every release, since npm does not allow reusing a published version.
