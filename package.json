@@ -25,9 +25,9 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./astro": {
-      "types": "./dist/astro.d.ts",
-      "import": "./dist/astro.js"
+    "./satteri": {
+      "types": "./dist/satteri.d.ts",
+      "import": "./dist/satteri.js"
     },
     "./components/Typst.astro": "./src/components/Typst.astro"
   },

@@ -38,14 +38,14 @@ Configure `astro.config.ts` and pass rendering options to `typlet()`:
 
 ```ts
 import { defineConfig } from "astro/config";
-import typlet from "@aaron212/astro-typlet/astro";
+import typlet from "@aaron212/astro-typlet";
 
 export default defineConfig({
   integrations: [typlet({ throwOnError: false, copyTypst: true })],
 });
 ```
 
-The `AstroTypletOptions` type is exported from `@aaron212/astro-typlet/astro`. The integration enables Sätteri's
+The `AstroTypletOptions` type is exported from `@aaron212/astro-typlet`. The integration enables Sätteri's
 math feature and registers the plugins with the supplied rendering options.
 
 Set `copyTypst: true` to load `typlet/contrib/copy-typst` as a bundled client-side script on every page. When users
@@ -54,7 +54,7 @@ defaults to `false`.
 
 MDX inherits this configuration when `@astrojs/mdx` uses the site's Markdown processor. An explicit MDX processor
 override must be configured separately with the plugins shown below. Astro dependencies are optional peers;
-standalone Sätteri users can continue using the package's main entry point without installing Astro.
+standalone Sätteri users can use `@aaron212/astro-typlet/satteri` without installing Astro.
 
 ### Formulas in Astro files
 
@@ -106,7 +106,7 @@ Configure `astro.config.ts`:
 ```ts
 import { satteri } from "@astrojs/markdown-satteri";
 import { defineConfig } from "astro/config";
-import { prepareTypletMath, renderTypletMath } from "@aaron212/astro-typlet";
+import { prepareTypletMath, renderTypletMath } from "@aaron212/astro-typlet/satteri";
 
 export default defineConfig({
   markdown: {
@@ -152,7 +152,7 @@ configuration. Write formulas using Typst syntax, for example `$x^2 + y^2 = z^2$
 
 ```ts
 import { markdownToHtml } from "satteri";
-import { renderTypletMath } from "@aaron212/astro-typlet";
+import { renderTypletMath } from "@aaron212/astro-typlet/satteri";
 
 const markdown = `Inline math: $x^2 + y^2 = z^2$.
 
@@ -174,7 +174,7 @@ const { html } = markdownToHtml(markdown, {
 ```
 
 Pass rendering options to `renderTypletMath()`. The `TypletMathOptions` type is exported from
-`@aaron212/astro-typlet`. `copyTypst` is available only through the Astro integration.
+`@aaron212/astro-typlet/satteri`. `copyTypst` is available only through the Astro integration.
 
 Enable `features.math` to parse dollar-delimited math. Sätteri controls the delimiters and whether a formula is
 inline or display; only the formula's contents use Typst syntax. Fenced `math` code blocks also render as display
