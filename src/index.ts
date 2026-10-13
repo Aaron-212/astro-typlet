@@ -8,7 +8,7 @@ import {
 import { renderToString, type RenderOptions } from "typlet";
 
 /** Typlet options, with display mode determined by the Markdown math node. */
-export type SatteriTypletOptions = Omit<RenderOptions, "displayMode">;
+export type TypletMathOptions = Omit<RenderOptions, "displayMode">;
 
 /** Keep display math out of Astro's code highlighter. Pair with the HAST renderer. */
 export function prepareTypletMath(): MdastPluginDefinition {
@@ -36,7 +36,7 @@ export function prepareTypletMath(): MdastPluginDefinition {
 }
 
 /** Render all Markdown math as Typst. Enable Sätteri's `features.math` when parsing. */
-export function renderTypletMath(options: SatteriTypletOptions = {}): HastPluginDefinition {
+export function renderTypletMath(options: TypletMathOptions = {}): HastPluginDefinition {
   const counters = new WeakMap<object, { value: number }>();
 
   return defineHastPlugin({

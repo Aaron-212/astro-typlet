@@ -1,0 +1,13 @@
+---
+import { decodeHTML } from "entities";
+import { renderToString, type RenderOptions } from "typlet";
+import "typlet/fonts/typlet.css";
+
+export type Props = RenderOptions;
+
+// Slots render to HTML; decode escaped formula text before passing it to Typlet.
+const code = decodeHTML((await Astro.slots.render("default")) ?? "");
+const html = renderToString(code, Astro.props);
+---
+
+<Fragment set:html={html} />

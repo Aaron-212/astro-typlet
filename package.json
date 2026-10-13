@@ -1,7 +1,7 @@
 {
-  "name": "@aaron212/satteri-typlet",
-  "version": "0.0.1",
-  "description": "Sätteri plugins and an Astro integration for Typlet math rendering.",
+  "name": "@aaron212/astro-typlet",
+  "version": "0.0.5",
+  "description": "Sätteri plugins, an Astro integration, and an Astro component for Typlet math rendering.",
   "keywords": [
     "astro",
     "markdown",
@@ -13,10 +13,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Aaron-212/satteri-typlet.git"
+    "url": "git+https://github.com/Aaron-212/astro-typlet.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/components/*.astro"
   ],
   "type": "module",
   "exports": {
@@ -27,25 +28,30 @@
     "./astro": {
       "types": "./dist/astro.d.ts",
       "import": "./dist/astro.js"
-    }
+    },
+    "./components/Typst.astro": "./src/components/Typst.astro"
   },
   "scripts": {
     "build": "tsc",
-    "check": "tsc --noEmit",
-    "format": "oxfmt",
-    "format:check": "oxfmt --check",
+    "check": "tsc --noEmit && astro check --tsconfig tsconfig.astro.json",
+    "format": "oxfmt && prettier --plugin prettier-plugin-astro --config .oxfmtrc.json --write \"src/**/*.astro\"",
+    "format:check": "oxfmt --check && prettier --plugin prettier-plugin-astro --config .oxfmtrc.json --check \"src/**/*.astro\"",
     "lint": "oxlint"
   },
   "dependencies": {
+    "entities": "^8.1.0",
     "satteri": "^0.10.5",
     "typlet": "^0.1.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-satteri": "^0.4.3",
     "astro": "^7.3.8",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
-    "typescript": "^7.0.2"
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "@astrojs/markdown-satteri": "^0.4.3",
