@@ -65,7 +65,9 @@ Use the `Typst` component to render formulas directly in `.astro` pages and comp
 import Typst from "@aaron212/astro-typlet/components/Typst.astro";
 ---
 
-<p>The energy is <Typst>e = m c^2</Typst>.</p>
+<p>
+  The energy is <Typst>e = m c^2</Typst>.
+</p>
 
 <Typst displayMode throwOnError={false}>
   x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)

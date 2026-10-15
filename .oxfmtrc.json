@@ -4,5 +4,6 @@
   "useTabs": false,
   "singleQuote": false,
   "semi": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "astro": true
 }
