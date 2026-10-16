@@ -1,4 +1,4 @@
-import { isSatteriProcessor } from "@astrojs/markdown-satteri";
+import { isSatteriProcessor, satteri } from "@astrojs/markdown-satteri";
 import type { AstroIntegration } from "astro";
 import { prepareTypletMath, renderTypletMath, type TypletMathOptions } from "./satteri.js";
 
@@ -16,7 +16,7 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
   return {
     name: "astro-typlet",
     hooks: {
-      "astro:config:setup": ({ config, injectScript }) => {
+      "astro:config:setup": ({ config, updateConfig, injectScript }) => {
         const processor = config.markdown.processor;
         if (!isSatteriProcessor(processor)) {
           throw new Error(
@@ -25,9 +25,16 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
           );
         }
 
-        processor.options.features.math = true;
-        processor.options.mdastPlugins.push(preparePlugin);
-        processor.options.hastPlugins.push(renderPlugin);
+        updateConfig({
+          markdown: {
+            processor: satteri({
+              ...processor.options,
+              features: { ...processor.options.features, math: true },
+              mdastPlugins: [...processor.options.mdastPlugins, preparePlugin],
+              hastPlugins: [...processor.options.hastPlugins, renderPlugin],
+            }),
+          },
+        });
 
         injectScript("page-ssr", 'import "typlet/fonts/typlet.css";');
         if (copyTypst) {
