@@ -52,7 +52,7 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "@astrojs/markdown-satteri": "^0.4.3",
+    "@astrojs/markdown-satteri": "^0.3.7 || ^0.4.0",
     "astro": "^7.0.0"
   },
   "peerDependenciesMeta": {
