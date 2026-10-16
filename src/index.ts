@@ -10,7 +10,8 @@ export interface AstroTypletOptions extends TypletMathOptions {
 /** Configure Typlet math rendering and load its styles in Astro. */
 export default function typlet(options: AstroTypletOptions = {}): AstroIntegration {
   const { copyTypst = false, ...renderOptions } = options;
-  let configuredProcessor: object | undefined;
+  const preparePlugin = prepareTypletMath();
+  const renderPlugin = renderTypletMath(renderOptions);
 
   return {
     name: "astro-typlet",
@@ -25,9 +26,8 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
         }
 
         processor.options.features.math = true;
-        processor.options.mdastPlugins.push(prepareTypletMath());
-        processor.options.hastPlugins.push(renderTypletMath(renderOptions));
-        configuredProcessor = processor.options;
+        processor.options.mdastPlugins.push(preparePlugin);
+        processor.options.hastPlugins.push(renderPlugin);
 
         injectScript("page-ssr", 'import "typlet/fonts/typlet.css";');
         if (copyTypst) {
@@ -35,9 +35,15 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
         }
       },
       "astro:config:done": ({ config }) => {
-        if (config.markdown.processor.options !== configuredProcessor) {
+        const processor = config.markdown.processor;
+        if (
+          !isSatteriProcessor(processor) ||
+          processor.options.features.math !== true ||
+          !processor.options.mdastPlugins.includes(preparePlugin) ||
+          !processor.options.hastPlugins.includes(renderPlugin)
+        ) {
           throw new Error(
-            "Another integration replaced the Markdown processor after astro-typlet was configured. " +
+            "Another integration removed astro-typlet's plugins or disabled Sätteri math support. " +
               "Place astro-typlet after integrations that configure markdown.processor.",
           );
         }
