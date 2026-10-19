@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "astro-typlet-demo",
+  "compatibility_date": "2026-10-19",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "demos.aaron212.com/astro-typlet", "zone_name": "aaron212.com" },
+    { "pattern": "demos.aaron212.com/astro-typlet/*", "zone_name": "aaron212.com" },
+  ],
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+  },
+}

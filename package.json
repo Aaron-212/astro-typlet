@@ -17,6 +17,7 @@
   },
   "files": [
     "dist",
+    "src/styles.css",
     "src/components/*.astro"
   ],
   "type": "module",
@@ -29,7 +30,16 @@
       "types": "./dist/satteri.d.ts",
       "import": "./dist/satteri.js"
     },
-    "./components/Typst.astro": "./src/components/Typst.astro"
+    "./components/Typst.astro": "./src/components/Typst.astro",
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js"
+    },
+    "./typlet": {
+      "types": "./dist/typlet.d.ts",
+      "import": "./dist/typlet.js"
+    },
+    "./styles.css": "./src/styles.css"
   },
   "scripts": {
     "build": "tsc",

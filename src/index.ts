@@ -40,9 +40,9 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
           },
         });
 
-        injectScript("page-ssr", 'import "typlet/fonts/typlet.css";');
+        injectScript("page-ssr", 'import "@aaron212/astro-typlet/styles.css";');
         if (copyTypst) {
-          injectScript("page", 'import "typlet/contrib/copy-typst";');
+          injectScript("page", 'import "@aaron212/astro-typlet/runtime";');
         }
       },
       "astro:config:done": ({ config }) => {

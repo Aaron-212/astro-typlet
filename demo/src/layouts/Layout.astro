@@ -1,0 +1,22 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@/styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Astro Typlet integration demo</title>
+    <ClientRouter />
+  </head>
+  <body class="p-4 pb-8">
+    <main id="main" class="max-w-6xl mx-auto min-h-[90dvh]">
+      <slot />
+    </main>
+    <footer class="text-center">
+      ©<a href="https://aaron212.com/">Aaron212</a> 2026
+    </footer>
+  </body>
+</html>

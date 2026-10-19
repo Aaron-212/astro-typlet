@@ -1,0 +1,34 @@
+{
+  "name": "astro-typlet-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preinstall": "pnpm --dir .. install --frozen-lockfile --prod=false",
+    "dev": "pnpm --dir .. build && astro dev",
+    "build": "pnpm --dir .. build && astro build",
+    "check": "pnpm --dir .. build && astro check",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint .",
+    "serve": "astro preview",
+    "deploy": "pnpm build && wrangler deploy",
+    "preview": "pnpm build && wrangler preview"
+  },
+  "dependencies": {
+    "@aaron212/astro-typlet": "link:..",
+    "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@tailwindcss/vite": "^4.3.3",
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.87.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.10.1"
+}

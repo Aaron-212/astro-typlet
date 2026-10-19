@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+.astro-code {
+  min-width: 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.astro-code,
+.astro-code span {
+  background-color: var(--color-slate-100) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .astro-code,
+  .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--color-slate-900) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
+
+:root {
+  @apply bg-white text-black dark:bg-black dark:text-white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, ui-sans, "Segoe UI", sans-serif;
+  text-autospace: normal;
+
+  a {
+    @apply underline;
+  }
+}
+
+@theme {
+  --color-*: initial;
+
+  --color-slate-50: oklch(98.4% 0.003 247.858);
+  --color-slate-100: oklch(96.8% 0.007 247.896);
+  --color-slate-200: oklch(92.9% 0.013 255.508);
+  --color-slate-300: oklch(86.9% 0.022 252.894);
+  --color-slate-400: oklch(70.4% 0.04 256.788);
+  --color-slate-500: oklch(55.4% 0.046 257.417);
+  --color-slate-600: oklch(44.6% 0.043 257.281);
+  --color-slate-700: oklch(37.2% 0.044 257.287);
+  --color-slate-800: oklch(27.9% 0.041 260.031);
+  --color-slate-900: oklch(20.8% 0.042 265.755);
+  --color-slate-950: oklch(12.9% 0.042 264.695);
+
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Apple System Accent Colors */
+  --color-red-light: oklch(0.6541 0.2323 28.84);
+  --color-red-dark: oklch(0.6633 0.2236 28.29);
+  --color-orange-light: oklch(0.7652 0.1752 62.57);
+  --color-orange-dark: oklch(0.7807 0.1712 66.67);
+  --color-yellow-light: oklch(0.8652 0.1766 90.35);
+  --color-yellow-dark: oklch(0.8859 0.1811 95.6);
+  --color-green-light: oklch(0.7305 0.1941 147.37);
+  --color-green-dark: oklch(0.7557 0.208 146.92);
+  --color-mint-light: oklch(0.7483 0.1293 189.02);
+  --color-mint-dark: oklch(0.8023 0.0998 192.11);
+  --color-teal-light: oklch(0.6998 0.1109 212.72);
+  --color-teal-dark: oklch(0.7706 0.1181 211.98);
+  --color-cyan-light: oklch(0.7066 0.133 233.77);
+  --color-cyan-dark: oklch(0.8189 0.1183 226.98);
+  --color-blue-light: oklch(0.6028 0.2177 257.42);
+  --color-blue-dark: oklch(0.6243 0.2055 255.52);
+  --color-indigo-light: oklch(0.5302 0.1923 278.27);
+  --color-indigo-dark: oklch(0.5564 0.2032 278.15);
+  --color-purple-light: oklch(0.6149 0.2129 312.41);
+  --color-purple-dark: oklch(0.656 0.2274 312.42);
+  --color-pink-light: oklch(0.6491 0.2389 17.8);
+  --color-pink-dark: oklch(0.6577 0.2317 16.02);
+  --color-brown-light: oklch(0.6322 0.0643 72.82);
+  --color-brown-dark: oklch(0.665 0.0637 72.95);
+}
+
+.math-preview {
+  overflow-x: auto;
+  line-height: 2;
+}
+
+.math-preview .typlet-display {
+  margin-block: 1rem;
+}
