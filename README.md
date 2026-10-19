@@ -77,14 +77,18 @@ import Typst from "@aaron212/astro-typlet/components/Typst.astro";
 Write Typst math source between the component's tags, without `$` or `$$` delimiters. Inline rendering is the
 default; set `displayMode` for a display equation. The component accepts Typlet's `RenderOptions` as props, including
 `preamble`, `output`, and `throwOnError`. Multiline formulas can also be written directly between the tags.
-Use a string expression for dynamic formulas or source containing characters such as `{` and `<`, which Astro
-would otherwise interpret as template syntax:
+Use the optional `formula` prop for dynamic formulas or source containing characters such as `{` and `<`, which
+Astro would otherwise interpret as template syntax. When provided, `formula` takes precedence over the default
+slot, including when it is an empty string. The prop is passed directly to Typlet without HTML decoding:
 
 ```astro
-<Typst>{"a < b"}</Typst>
+<Typst formula={"a < b"} />
 
-<Typst displayMode>{`sum_(i=1)^n i
-  = (n(n+1))/2`}</Typst>
+<Typst
+  displayMode
+  formula={`sum_(i=1)^n i
+  = (n(n+1))/2`}
+/>
 ```
 
 The component renders on the server and imports Typlet's stylesheet and fonts automatically. It works without the
@@ -123,7 +127,7 @@ export default defineConfig({
 
 Pass rendering options to `renderTypletMath()`; `prepareTypletMath()` takes no options.
 
-Use both plugins: `prepareTypletMath()` prepares dollar-delimited block math and fenced `math` blocks before
+Use both plugins: `prepareTypletMath()` prepares dollar-delimited block math and fenced `typlet` blocks before
 Astro's syntax highlighter runs; `renderTypletMath()` renders the formulas afterward. Ordinary code blocks keep
 Astro's default syntax highlighting. Inline math is handled directly by the HAST renderer.
 See the [Astro Sätteri API reference](https://docs.astro.build/en/reference/markdown-processors/satteri/)
@@ -179,7 +183,7 @@ Pass rendering options to `renderTypletMath()`. The `TypletMathOptions` type is 
 `@aaron212/astro-typlet/satteri`. `copyTypst` is available only through the Astro integration.
 
 Enable `features.math` to parse dollar-delimited math. Sätteri controls the delimiters and whether a formula is
-inline or display; only the formula's contents use Typst syntax. Fenced `math` code blocks also render as display
+inline or display; only the formula's contents use Typst syntax. Fenced `typlet` code blocks also render as display
 math. Ordinary code blocks and inline code are left unchanged.
 
 Load Typlet's stylesheet in the page displaying the generated HTML. With a CSS-aware bundler:

@@ -3,7 +3,9 @@ import {
   defineMdastPlugin,
   htmlToHast,
   type HastPluginDefinition,
+  type MdastNode,
   type MdastPluginDefinition,
+  type MdastVisitorContext,
 } from "satteri";
 import { renderToString, type RenderOptions } from "typlet";
 
@@ -12,25 +14,23 @@ export type TypletMathOptions = Omit<RenderOptions, "displayMode">;
 
 /** Keep display math out of Astro's code highlighter. Pair with the HAST renderer. */
 export function prepareTypletMath(): MdastPluginDefinition {
+  function replaceMath(node: Readonly<Extract<MdastNode, { type: "math" | "code" }>>, ctx: MdastVisitorContext) {
+    ctx.replaceNode(node, {
+      type: "typletMath",
+      data: { ...node.data, hName: "div", hProperties: { className: ["math-display"] } },
+      children: [{ type: "text", value: node.value }],
+    });
+  }
+
   return defineMdastPlugin({
     name: "prepare-typlet-math",
-    math(node, ctx) {
-      ctx.replaceNode(node, {
-        type: "typletMath",
-        data: { ...node.data, hName: "div", hProperties: { className: ["math-display"] } },
-        children: [{ type: "text", value: node.value }],
-      });
-    },
+    math: replaceMath,
     code(node, ctx) {
       if (node.lang !== "typlet") {
         return;
       }
 
-      ctx.replaceNode(node, {
-        type: "typletMath",
-        data: { ...node.data, hName: "div", hProperties: { className: ["math-display"] } },
-        children: [{ type: "text", value: node.value }],
-      });
+      replaceMath(node, ctx);
     },
   });
 }
@@ -41,9 +41,6 @@ export function renderTypletMath(options: TypletMathOptions = {}): HastPluginDef
 
   return defineHastPlugin({
     name: "render-typlet-math",
-    before(_root, ctx) {
-      counters.set(ctx.data, { value: 0 });
-    },
     element: {
       filter: ["code", "span", "div"],
       visit(node, ctx) {
@@ -51,10 +48,16 @@ export function renderTypletMath(options: TypletMathOptions = {}): HastPluginDef
         const classes = Array.isArray(className) ? className : [];
         const inline = classes.includes("math-inline");
         const display = classes.includes("math-display");
-        const languageMath = classes.includes("language-math");
+        const languageTyplet = classes.includes("language-typlet");
 
-        if (!inline && !display && !languageMath) {
+        if (!inline && !display && !languageTyplet) {
           return;
+        }
+
+        let counter = options.equationCounter ?? counters.get(ctx.data);
+        if (!counter) {
+          counter = { value: 0 };
+          counters.set(ctx.data, counter);
         }
 
         const parent = ctx.parent(node);
@@ -62,7 +65,7 @@ export function renderTypletMath(options: TypletMathOptions = {}): HastPluginDef
         const html = renderToString(ctx.textContent(node), {
           ...options,
           displayMode: inPre || display,
-          equationCounter: options.equationCounter ?? counters.get(ctx.data),
+          equationCounter: counter,
         });
         // Materialize the generated markup so later plugins and JSX compilation can use it.
         const rendered = htmlToHast(html, { fragment: true });

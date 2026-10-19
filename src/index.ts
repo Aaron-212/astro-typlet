@@ -29,7 +29,7 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
           markdown: {
             processor: satteri({
               ...processor.options,
-              features: { ...processor.options.features, math: true },
+              features: { ...processor.options.features, math: processor.options.features.math || true },
               mdastPlugins: [...processor.options.mdastPlugins, preparePlugin],
               hastPlugins: [...processor.options.hastPlugins, renderPlugin],
             }),
@@ -45,7 +45,7 @@ export default function typlet(options: AstroTypletOptions = {}): AstroIntegrati
         const processor = config.markdown.processor;
         if (
           !isSatteriProcessor(processor) ||
-          processor.options.features.math !== true ||
+          !processor.options.features.math ||
           !processor.options.mdastPlugins.includes(preparePlugin) ||
           !processor.options.hastPlugins.includes(renderPlugin)
         ) {
