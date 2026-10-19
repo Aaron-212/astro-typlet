@@ -45,8 +45,20 @@ export default defineConfig({
 });
 ```
 
-The `AstroTypletOptions` type is exported from `@aaron212/astro-typlet`. The integration enables Sätteri's
-math feature and registers the plugins with the supplied rendering options.
+The `AstroTypletOptions` type is exported from `@aaron212/astro-typlet`. The integration registers the plugins with
+the supplied rendering options and enables Sätteri's math feature when dollar-delimited math is selected,
+preserving existing math parser options.
+
+Set `syntax` to choose which Markdown syntax Typlet renders:
+
+| `syntax`           | Rendered as Typst                                     |
+| ------------------ | ----------------------------------------------------- |
+| `"math"`           | Inline `$...$` and display `$$...$$` math             |
+| `"typlet"`         | Fenced code blocks labeled `typlet`                   |
+| `"both"` (default) | Both dollar-delimited math and fenced `typlet` blocks |
+
+For example, `typlet({ syntax: "typlet" })` renders only fenced `typlet` blocks and leaves the processor's math
+feature setting unchanged. Unselected syntax remains available to the rest of the Markdown pipeline.
 
 Set `copyTypst: true` to load `typlet/contrib/copy-typst` as a bundled client-side script on every page. When users
 copy rendered formulas, the clipboard's plain text contains their Typst source with math delimiters. This option
@@ -125,7 +137,8 @@ export default defineConfig({
 });
 ```
 
-Pass rendering options to `renderTypletMath()`; `prepareTypletMath()` takes no options.
+Pass rendering options to `renderTypletMath()`. To select syntax manually, pass the same `syntax` option to both
+plugins, for example `prepareTypletMath({ syntax: "typlet" })` and `renderTypletMath({ syntax: "typlet" })`.
 
 Use both plugins: `prepareTypletMath()` prepares dollar-delimited block math and fenced `typlet` blocks before
 Astro's syntax highlighter runs; `renderTypletMath()` renders the formulas afterward. Ordinary code blocks keep
@@ -182,7 +195,9 @@ const { html } = markdownToHtml(markdown, {
 Pass rendering options to `renderTypletMath()`. The `TypletMathOptions` type is exported from
 `@aaron212/astro-typlet/satteri`. `copyTypst` is available only through the Astro integration.
 
-Enable `features.math` to parse dollar-delimited math. Sätteri controls the delimiters and whether a formula is
+The standalone renderer also accepts `syntax: "math" | "typlet" | "both"`, defaulting to `"both"`.
+Enable `features.math` to parse dollar-delimited math; it is not required for `syntax: "typlet"`.
+Sätteri controls the delimiters and whether a formula is
 inline or display; only the formula's contents use Typst syntax. Fenced `typlet` code blocks also render as display
 math. Ordinary code blocks and inline code are left unchanged.
 
