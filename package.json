@@ -4,8 +4,10 @@
   "description": "Sätteri plugins, an Astro integration, and an Astro component for Typlet math rendering.",
   "keywords": [
     "astro",
+    "astro-integration",
     "markdown",
     "math",
+    "renderer",
     "satteri",
     "typlet",
     "typst"
