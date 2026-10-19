@@ -10,6 +10,7 @@
     "typlet",
     "typst"
   ],
+  "homepage": "https://demos.aaron212.com/astro-typlet/",
   "license": "MIT",
   "repository": {
     "type": "git",
