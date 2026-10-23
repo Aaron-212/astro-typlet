@@ -173,8 +173,8 @@ importers:
         specifier: ^0.10.5
         version: 0.10.5
       typlet:
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.10
@@ -1809,8 +1809,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typlet@0.1.0:
-    resolution: {integrity: sha512-m9F3chIDfFLxhH2rkhZqUvRtiFDP/gfoWq0g1fSZAPo2IxxZWbirsHRVC6Dlxlte8wiVPDoB/L30CWG8AlNDRA==}
+  typlet@0.2.0:
+    resolution: {integrity: sha512-Uyf/FCR0+tl+PUPEahHDPzI+vNeqNNh2J+tqhlTdPfHjfAwPN7HwNyqbe0X4qdF3eKbynaFg9bBBpj7Nj09h1g==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -3602,7 +3602,7 @@ snapshots:
 
   typescript@6.0.3: {}
 
-  typlet@0.1.0: {}
+  typlet@0.2.0: {}
 
   ufo@1.6.4: {}
 
