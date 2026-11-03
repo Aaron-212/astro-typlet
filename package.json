@@ -52,7 +52,7 @@
     "lint": "oxlint"
   },
   "dependencies": {
-    "entities": "^8.1.0",
+    "entities": "^9.0.0",
     "satteri": "^0.10.5",
     "typlet": "^0.2.0"
   },
@@ -78,6 +78,5 @@
   },
   "engines": {
     "node": ">=24"
-  },
-  "packageManager": "pnpm@12.10.1"
+  }
 }
