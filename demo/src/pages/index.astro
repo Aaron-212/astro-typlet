@@ -86,8 +86,8 @@ export default defineConfig({
 });`}
       />
       <p>
-        In <code>.astro</code> files, import the <code>Typst</code> component. Use <code>displayMode</code> for block
-        equations and the <code>formula</code> prop for source containing template characters such as <code>&lt;</code>.
+        In <code>.astro</code> files, use <code>is:raw</code> on <code>Typst</code> to write formulas as literal text.
+        Use <code>display="block"</code> for block equations and the <code>formula</code> prop for dynamic formulas.
       </p>
       <CodeBlock code={componentSource} lang="astro" />
     </div>

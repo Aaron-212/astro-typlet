@@ -22,26 +22,29 @@ import Typst from "@aaron212/astro-typlet/components/Typst.astro";
 ---
 
 <p>
-  The energy is <Typst>e = m c^2</Typst>.
+  The energy is <Typst is:raw>e = m c^2</Typst>.
 </p>
 
-<Typst displayMode throwOnError={false}>
+<Typst is:raw display="block">a < b < c</Typst>
+
+<Typst is:raw display="block" throwOnError={false}>
   x = (-b plus.minus sqrt(b^2 - 4 a c)) / (2 a)
 </Typst>
 ```
 
-Write Typst math source between the component's tags, without `$` or `$$` delimiters. Inline rendering is the
-default; set `displayMode` for a display equation. The component accepts Typlet's `RenderOptions` as props, including
-`preamble`, `output`, and `throwOnError`. Multiline formulas can also be written directly between the tags.
-Use the optional `formula` prop for dynamic formulas or source containing characters such as `{` and `<`, which
-Astro would otherwise interpret as template syntax. When provided, `formula` takes precedence over the default
-slot, including when it is an empty string. The prop is passed directly to Typlet without HTML decoding:
+Write Typst math source between the component's tags, without `$` or `$$` delimiters. Add `is:raw` to tell Astro
+to treat the formula as text, including characters such as `{` and `<`. Use `display="block"` for a block equation.
+The default is `display="inline"`.
+The component accepts Typlet's `RenderOptions` as props, including `preamble`, `output`, and `throwOnError`.
+
+Use the optional `formula` prop for dynamic formulas. When provided, `formula` takes precedence over the default
+slot, including when it is an empty string. The component passes the prop directly to Typlet.
 
 ```astro
 <Typst formula={"a < b"} />
 
 <Typst
-  displayMode
+  display="block"
   formula={`sum_(i=1)^n i
   = (n(n+1))/2`}
 />
@@ -182,8 +185,8 @@ The `@aaron212/astro-typlet/runtime` entry point re-exports Typlet's copy helper
 when imported. Use it to enable copying without the Astro integration.
 
 Both `typlet()` and `renderTypletMath()` accept Typlet's `RenderOptions` except `displayMode`, which is determined
-by each math node. The `Typst` Astro component accepts all rendering options as props, including `displayMode`.
-Use the configuration example for your entry point above.
+by each math node. The `Typst` Astro component uses `display` to configure this option and also accepts `displayMode`
+for compatibility. If you pass both props, `display` takes precedence.
 
 Typlet's defaults apply: output includes HTML and accessible MathML, and invalid formulas throw a `TypletError`.
 Set `throwOnError: false` to show invalid formula source in the configured error color instead.

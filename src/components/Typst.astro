@@ -6,12 +6,17 @@ import "../styles.css";
 export interface Props extends RenderOptions {
   /** Typst math source. Takes precedence over the default slot, including when empty. */
   formula?: string;
+  /** Equation layout. Takes precedence over `displayMode`. Defaults to `"inline"`. */
+  display?: "inline" | "block";
 }
 
-const { formula, ...renderOptions } = Astro.props;
+const { formula, display, displayMode, ...renderOptions } = Astro.props;
 // Slots render to HTML; decode escaped formula text before passing it to Typlet.
 const code = formula ?? decodeHTML((await Astro.slots.render("default")) ?? "");
-const html = renderToString(code, renderOptions);
+const html = renderToString(code, {
+  ...renderOptions,
+  displayMode: display === undefined ? (displayMode ?? false) : display === "block",
+});
 ---
 
 <Fragment set:html={html} />
