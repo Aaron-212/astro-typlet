@@ -5,7 +5,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://demos.aaron212.com",
   base: "/astro-typlet",
-  outDir: "./dist/astro-typlet",
+  outDir: "./build/astro-typlet",
   output: "static",
   vite: { plugins: [tailwindcss()] },
   integrations: [typlet({ copyTypst: true })],
