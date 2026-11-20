@@ -48,7 +48,6 @@
     "build": "tsc",
     "check": "tsc --noEmit && astro check --tsconfig tsconfig.astro.json",
     "format": "oxfmt",
-    "format:check": "oxfmt --check",
     "lint": "oxlint"
   },
   "dependencies": {

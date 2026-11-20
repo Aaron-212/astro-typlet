@@ -4,15 +4,14 @@
   "type": "module",
   "scripts": {
     "preinstall": "pnpm --dir .. install --frozen-lockfile --prod=false",
-    "dev": "pnpm --dir .. build && astro dev",
-    "build": "pnpm --dir .. build && astro build",
-    "check": "pnpm --dir .. build && astro check",
-    "format": "oxfmt .",
-    "format:check": "oxfmt --check .",
-    "lint": "oxlint .",
-    "serve": "astro preview",
-    "deploy": "pnpm build && cf deploy ./build",
-    "preview": "pnpm build && cf previews deploy ./build"
+    "dev": "pnpm --dir .. run build && astro dev",
+    "build": "pnpm --dir .. run build && astro build",
+    "check": "pnpm --dir .. run build && astro check",
+    "format": "oxfmt",
+    "lint": "oxlint",
+    "build:preview": "astro preview",
+    "deploy": "pnpm run build && cf deploy ./build",
+    "preview": "pnpm run build && cf previews deploy ./build"
   },
   "dependencies": {
     "@aaron212/astro-typlet": "link:..",
