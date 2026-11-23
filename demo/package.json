@@ -20,6 +20,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^24.19.2",
     "cf": "1.0.0-rc.2",
     "oxfmt": "^0.79.0",
     "oxlint": "^1.94.0",

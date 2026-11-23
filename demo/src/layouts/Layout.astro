@@ -13,16 +13,18 @@ const { title } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Render Typst math in Astro with Typlet." />
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body class="p-4 pb-8">
-    <main id="main" class="max-w-6xl mx-auto min-h-[90dvh]">
+  <body class="flex min-h-dvh flex-col px-4">
+    <main id="main" class="mx-auto w-full max-w-6xl flex-1 py-10 sm:py-16">
       <slot />
     </main>
-    <footer class="text-center">
-      ©<a href="https://aaron212.com/">Aaron212</a> 2026
+    <footer class="mx-auto w-full max-w-6xl border-t border-zinc-200 py-6 text-sm dark:border-zinc-800">
+      <a href="https://aaron212.com/">Aaron212</a>
     </footer>
   </body>
 </html>

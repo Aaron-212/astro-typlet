@@ -1,29 +1,32 @@
 ---
 import CodeBlock from "@/components/CodeBlock.astro";
-import Layout from "@/layouts/Layout.astro";
 import ComponentExample from "@/examples/Component.astro";
 import componentSource from "@/examples/Component.astro?raw";
-import { Content as Inline } from "@/examples/inline.md";
 import { Content as Display } from "@/examples/display.md";
-import { Content as Fenced } from "@/examples/fenced.md";
-import inlineSource from "@/examples/inline.md?raw";
 import displaySource from "@/examples/display.md?raw";
+import { Content as Fenced } from "@/examples/fenced.md";
 import fencedSource from "@/examples/fenced.md?raw";
+import { Content as Inline } from "@/examples/inline.md";
+import inlineSource from "@/examples/inline.md?raw";
+import Layout from "@/layouts/Layout.astro";
 
 const examples = [
-  { number: "01", type: "Inline math", source: inlineSource, Content: Inline },
-  { number: "02", type: "Display math", source: displaySource, Content: Display },
-  { number: "03", type: "Fenced Typlet blocks", source: fencedSource, Content: Fenced },
+  { id: "inline-math", title: "Inline math", source: inlineSource, Content: Inline },
+  { id: "display-math", title: "Display math", source: displaySource, Content: Display },
+  { id: "fenced-blocks", title: "Fenced Typlet blocks", source: fencedSource, Content: Fenced },
 ];
+
+const config = `import typlet from "@aaron212/astro-typlet";
+import { defineConfig } from "astro/config";
+
+export default defineConfig({
+  integrations: [typlet({ copyTypst: true })],
+});`;
 ---
 
-<Layout title="Astro Typlet integration demo">
-  <div class="flex flex-col gap-4 py-4">
-    <h1 class="text-4xl font-semibold">Astro Typlet integration demo</h1>
-    <div class="flex flex-row flex-wrap gap-4 text-lg">
-      <a href="https://www.npmjs.com/package/@aaron212/astro-typlet">npm: @aaron212/astro-typlet ↗</a>
-      <a href="https://github.com/Aaron-212/astro-typlet">GitHub: Aaron-212/astro-typlet ↗</a>
-    </div>
+<Layout title="Astro Typlet demo">
+  <header class="max-w-3xl space-y-4">
+    <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">Astro Typlet</h1>
     <p class="text-lg">
       Render <a href="https://typst.app/">Typst</a> math in <a href="https://astro.build">Astro</a> with
       <a href="https://github.com/dbccccccc/Typlet">Typlet</a>. Formulas render on the server with HTML and accessible
@@ -32,64 +35,54 @@ const examples = [
     <p>
       Select and copy a formula to get its Typst source. This demo enables <code>copyTypst</code>.
     </p>
-  </div>
+    <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Project links">
+      <a href="https://www.npmjs.com/package/@aaron212/astro-typlet">npm</a>
+      <a href="https://github.com/Aaron-212/astro-typlet">GitHub</a>
+    </nav>
+  </header>
 
-  <section aria-label="Markdown examples">
-    {examples.map(({ number, type, source, Content }) => (
-      <article class="py-4">
-        <h2 class="text-md font-light tracking-wider uppercase tabular-nums">
-          {number}. {type}
+  <div class="mt-10 space-y-10">
+    {examples.map(({ id, title, source, Content }) => (
+      <section class="space-y-3" aria-labelledby={id}>
+        <h2 id={id} class="text-xl font-semibold">
+          {title}
         </h2>
-        <div class="grid grid-cols-1 gap-4 py-2 xl:grid-cols-2">
+        <div class="grid gap-3 xl:grid-cols-2">
           <CodeBlock code={source.trim()} lang="md" />
-          <div class="math-preview min-w-0 rounded-lg bg-slate-100 p-4 dark:bg-slate-900">
+          <div class="math-preview rounded-lg border border-zinc-200 bg-zinc-100 p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <Content />
           </div>
         </div>
-      </article>
+      </section>
     ))}
-  </section>
 
-  <section class="py-4" aria-labelledby="component-title">
-    <h2 id="component-title" class="text-md font-light tracking-wider uppercase tabular-nums">
-      04. Astro component
-    </h2>
-    <div class="grid grid-cols-1 gap-4 py-2 xl:grid-cols-2">
-      <CodeBlock code={componentSource} lang="astro" />
-      <div class="math-preview min-w-0 rounded-lg bg-slate-100 p-4 dark:bg-slate-900">
-        <ComponentExample />
-      </div>
-    </div>
-  </section>
-
-  <hr />
-
-  <section class="py-4" aria-labelledby="usage-title">
-    <h2 id="usage-title" class="text-xl font-medium">
-      How to use
-    </h2>
-    <div class="grid grid-cols-1 gap-x-4 gap-y-8 py-4 xl:grid-cols-[1fr_2fr]">
-      <p>Add the dependency to your Astro project.</p>
-      <CodeBlock code="pnpm add @aaron212/astro-typlet" lang="sh" />
-      <p>
-        Add the integration to render inline math, display math, and fenced <code>typlet</code> blocks in Markdown.
-        Astro 7 uses Sätteri by default.
-      </p>
-      <CodeBlock
-        lang="ts"
-        code={`// astro.config.ts
-import typlet from "@aaron212/astro-typlet";
-import { defineConfig } from "astro/config";
-
-export default defineConfig({
-  integrations: [typlet({ copyTypst: true })],
-});`}
-      />
+    <section class="space-y-3" aria-labelledby="astro-component">
+      <h2 id="astro-component" class="text-xl font-semibold">
+        Astro component
+      </h2>
       <p>
         In <code>.astro</code> files, use <code>is:raw</code> on <code>Typst</code> to write formulas as literal text.
         Use <code>display="block"</code> for block equations and the <code>formula</code> prop for dynamic formulas.
       </p>
-      <CodeBlock code={componentSource} lang="astro" />
-    </div>
-  </section>
+      <div class="grid gap-3 xl:grid-cols-2">
+        <CodeBlock code={componentSource} lang="astro" />
+        <div class="math-preview rounded-lg border border-zinc-200 bg-zinc-100 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+          <ComponentExample />
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-3 border-t border-zinc-200 pt-8 dark:border-zinc-800" aria-labelledby="usage">
+      <h2 id="usage" class="text-xl font-semibold">
+        Use in Astro
+      </h2>
+      <p>Install the package in your Astro project.</p>
+      <CodeBlock code="pnpm add @aaron212/astro-typlet" lang="sh" />
+      <p>
+        Add the integration to <code>astro.config.ts</code> to render inline math, display math, and fenced
+        <code>typlet</code> blocks in Markdown. Astro 7 uses Sätteri by default.
+      </p>
+      <CodeBlock code={config} lang="ts" />
+    </section>
+  </div>
 </Layout>
